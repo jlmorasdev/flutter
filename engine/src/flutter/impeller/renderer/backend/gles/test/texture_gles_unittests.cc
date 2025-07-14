@@ -11,6 +11,7 @@
 #include "impeller/core/texture_descriptor.h"
 #include "impeller/renderer/backend/gles/handle_gles.h"
 #include "impeller/renderer/backend/gles/proc_table_gles.h"
+#include "impeller/renderer/backend/gles/test/mock_gles.h"
 
 namespace impeller::testing {
 
@@ -77,11 +78,27 @@ TEST_P(TextureGLESTest, Binds2DTexture) {
 
   ASSERT_TRUE(texture);
 
+<<<<<<< HEAD
   EXPECT_EQ(
       TextureGLES::Cast(*texture).ComputeTypeForBinding(GL_READ_FRAMEBUFFER),
       TextureGLES::Type::kTexture);
   EXPECT_EQ(TextureGLES::Cast(*texture).ComputeTypeForBinding(GL_FRAMEBUFFER),
             TextureGLES::Type::kTextureMultisampled);
+=======
+  if (GetContext()->GetCapabilities()->SupportsImplicitResolvingMSAA()) {
+    EXPECT_EQ(
+        TextureGLES::Cast(*texture).ComputeTypeForBinding(GL_READ_FRAMEBUFFER),
+        TextureGLES::Type::kTexture);
+    EXPECT_EQ(TextureGLES::Cast(*texture).ComputeTypeForBinding(GL_FRAMEBUFFER),
+              TextureGLES::Type::kTextureMultisampled);
+  } else {
+    EXPECT_EQ(
+        TextureGLES::Cast(*texture).ComputeTypeForBinding(GL_READ_FRAMEBUFFER),
+        TextureGLES::Type::kRenderBufferMultisampled);
+    EXPECT_EQ(TextureGLES::Cast(*texture).ComputeTypeForBinding(GL_FRAMEBUFFER),
+              TextureGLES::Type::kRenderBufferMultisampled);
+  }
+>>>>>>> 077b4a4ce10a07b82caa6897f0c626f9c0a3ac90
 }
 
 }  // namespace impeller::testing
